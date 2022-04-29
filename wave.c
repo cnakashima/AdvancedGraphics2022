@@ -423,7 +423,7 @@ double ripple (double x, double z, int frame){
   if (sqrt(x*x + z*z) > (frame-1)*step/27){
     return 0;
   }
-  double amplitude = 1.5/(10+80*sqrt(x*x + z*z));
+  double amplitude = 1.5/(frame/13.5)(10+80*sqrt(x*x + z*z));
   double wave = cos(30*sqrt(x*x + z*z) - progress);
   double y = amplitude * wave;
   return y;
@@ -1111,7 +1111,7 @@ int test01()
 
     int triangle_ind = num_objects;
 
-    double step = .2;
+    double step = .02;
     for (double i = -1; i < 1; i += step){
       for (double j = -1+step; j <= 1; j+=step){
         // for every i. j pair make two triangles to comprise a square
@@ -1203,7 +1203,7 @@ int key;
 
 
 // to generate many frames
-  for (int frame = 0; frame <= 50; frame ++){
+  for (int frame = 0; frame <= 135; frame ++){
 
     for (int i = triangle_ind; i < num_objects; i++){
       triangle_coords[i][0][1] = ripple(triangle_coords[i][0][0], triangle_coords[i][0][2],frame);
