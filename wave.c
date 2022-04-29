@@ -1242,8 +1242,8 @@ int key;
 
 
 
-      for (int ypix = 0 ; ypix <= SCREEN_HEIGHT ; ypix+=5) {
-         for (int xpix = 0; xpix <= SCREEN_WIDTH ; xpix +=5){
+      for (int ypix = 0 ; ypix <= SCREEN_HEIGHT ; ypix++) {
+         for (int xpix = 0; xpix <= SCREEN_WIDTH ; xpix ++){
 
              Rtip[0]    = (H/(SCREEN_WIDTH/2)) * (xpix - SCREEN_WIDTH/2);  Rtip[1]    = (H/(SCREEN_HEIGHT/2)) * (ypix - SCREEN_HEIGHT/2) ;  Rtip[2]   =   1;
 
