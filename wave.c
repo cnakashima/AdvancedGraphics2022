@@ -423,7 +423,7 @@ double ripple (double x, double z, int frame){
   if (sqrt(x*x + z*z) > (frame-1)*step/27){
     return 0;
   }
-  double amplitude = 1.5/(frame/13.5)(10+80*sqrt(x*x + z*z));
+  double amplitude = 1.5/(frame/13.5)*(10+80*sqrt(x*x + z*z));
   double wave = cos(30*sqrt(x*x + z*z) - progress);
   double y = amplitude * wave;
   return y;
