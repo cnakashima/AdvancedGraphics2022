@@ -23,6 +23,8 @@ int d1[2];
 int idA ;
 int d2[2];
 int idB ;
+int d3[2];
+int idC ;
 
 double vm[4][4], vi[4][4];
 
@@ -232,6 +234,22 @@ int Texture(double color[3], int texture_code, double u, double v, double lowu, 
 
     // returns -1 on error, 1 if ok
         // if (e == -1) { continue ; }
+  }if (texture_code == 1){
+    double height = upv-lowv;
+    double width = upu-lowu;
+    // printf("%d %d\n",d[0],d[1]) ;
+    double wratio = d3[0]/width;
+    double hratio = d3[1]/height;
+
+
+    double x = wratio * (u-lowu);
+    double y = hratio * (v-lowv);
+
+    // need to map u,v coordinates (double) to x,y coordinates (int) within dimensions of file in d
+    int e = get_xwd_map_color(idC, x, y,texture) ;
+
+    // returns -1 on error, 1 if ok
+        // if (e == -1) { continue ; }
   }
 
 
@@ -423,7 +441,11 @@ double ripple (double x, double z, int frame){
   if (sqrt(x*x + z*z) > (frame-1)*step/27){
     return 0;
   }
-  double amplitude = 1.5/(frame/13.5)*(10+80*sqrt(x*x + z*z));
+  double dim = frame/13.5;
+  if (dim < 1){
+    dim = 1;
+  }
+  double amplitude = 1.5/((dim)*(10+80*sqrt(x*x + z*z)));
   double wave = cos(30*sqrt(x*x + z*z) - progress);
   double y = amplitude * wave;
   return y;
@@ -728,6 +750,11 @@ int test01()
   if (idB == -1) { printf("failure\n") ;  exit(0) ; }
   e = get_xwd_map_dimensions(idB, d2) ;
   if (e == -1) { printf("failure\n") ;  exit(0) ; }
+  char nameC[] = "mosaic_skin.xwd";
+  idC = init_xwd_map_from_file (nameC) ;// returns -1 on error, 1 if ok
+  if (idC == -1) { printf("failure\n") ;  exit(0) ; }
+  e = get_xwd_map_dimensions(idC, d3) ;
+  if (e == -1) { printf("failure\n") ;  exit(0) ; }
 
     destinationid = create_new_xwd_map (SCREEN_WIDTH,SCREEN_HEIGHT) ;// returns -1 on error, 1 if ok
 
@@ -741,10 +768,10 @@ int test01()
     //////////////////////////////////////////////////////////////
     // floor of pool
     obtype[num_objects] = 1;
-    color[num_objects][0] = 0.8 ;
-    color[num_objects][1] = 0.8 ;
-    color[num_objects][2] = 0.8;
-    texture[num_objects] = 4;
+    color[num_objects][0] = 0.2 ;
+    color[num_objects][1] = 0.2 ;
+    color[num_objects][2] = 0.2 ;
+    texture[num_objects] = 1;
     reflection[num_objects] = 0.0;
     transparent[num_objects] = 0.0;
 
@@ -1203,7 +1230,7 @@ int key;
 
 
 // to generate many frames
-  for (int frame = 0; frame <= 135; frame ++){
+  for (int frame = 0; frame <= 46; frame ++){
 
     for (int i = triangle_ind; i < num_objects; i++){
       triangle_coords[i][0][1] = ripple(triangle_coords[i][0][0], triangle_coords[i][0][2],frame);
@@ -1215,8 +1242,8 @@ int key;
 
 
 
-      for (int ypix = 0 ; ypix <= SCREEN_HEIGHT ; ypix++) {
-         for (int xpix = 0; xpix <= SCREEN_WIDTH ; xpix ++){
+      for (int ypix = 0 ; ypix <= SCREEN_HEIGHT ; ypix+=5) {
+         for (int xpix = 0; xpix <= SCREEN_WIDTH ; xpix +=5){
 
              Rtip[0]    = (H/(SCREEN_WIDTH/2)) * (xpix - SCREEN_WIDTH/2);  Rtip[1]    = (H/(SCREEN_HEIGHT/2)) * (ypix - SCREEN_HEIGHT/2) ;  Rtip[2]   =   1;
 
@@ -1229,7 +1256,7 @@ int key;
          }
       }
 
-  sprintf(name, "wave/badwave%04d.xwd", frame);
+  sprintf(name, "wave/wave%04d.xwd", frame);
   xwd_map_to_named_xwd_file(destinationid, name) ;
     //
     // G_rgb(1,1,1) ; G_draw_string("'q' to quit", 50,50) ;
